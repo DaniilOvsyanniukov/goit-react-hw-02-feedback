@@ -12,21 +12,26 @@ class App extends Component {
     neutral: this.props.initialValue,
     bad: this.props.initialValue,
   };
+
   increment = (event) => {
     const buttonName = event.currentTarget.textContent;
-    if (buttonName === "good") {
-      this.setState((prevState) => ({ good: prevState.good + 1 }));
-    } else if (buttonName === "neutral") {
-      this.setState((prevState) => ({ neutral: prevState.neutral + 1 }));
-    } else {
-      this.setState((prevState) => ({ bad: prevState.bad + 1 }));
-    }
+    this.setState((prevState) => ({ [buttonName]: prevState[buttonName] + 1 }));
+  };
+
+  countTotalFeedback = () => {
+    const total = this.state.good + this.state.neutral + this.state.bad;
+    return total;
+  };
+
+  countPositiveFeedbackPercentage = () => {
+    const percentage = Math.floor(
+      (100 / this.countTotalFeedback()) * this.state.good
+    );
+    return percentage;
   };
 
   render() {
     const buttons = Object.keys(this.state);
-    let total = this.state.good + this.state.neutral + this.state.bad;
-    let percantage = Math.floor((100 / total) * this.state.good);
 
     return (
       <div className="container">
@@ -40,15 +45,15 @@ class App extends Component {
         </div>
         <div className="feedback-statistics">
           <p>Statistics</p>
-          {total === 0 ? (
+          {this.countTotalFeedback() === 0 ? (
             <p>"No feedback given"</p>
           ) : (
             <Statistics
               good={this.state.good}
               neutral={this.state.neutral}
               bad={this.state.bad}
-              total={total}
-              percantage={percantage}
+              total={this.countTotalFeedback()}
+              percantage={this.countPositiveFeedbackPercentage()}
             />
           )}
         </div>
