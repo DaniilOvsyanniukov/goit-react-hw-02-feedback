@@ -13,8 +13,7 @@ class App extends Component {
     bad: this.props.initialValue,
   };
 
-  increment = (event) => {
-    const buttonName = event.currentTarget.textContent;
+  increment = (buttonName) => {
     this.setState((prevState) => ({ [buttonName]: prevState[buttonName] + 1 }));
   };
 
